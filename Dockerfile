@@ -11,9 +11,15 @@ ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v${KCPTUN_VER}/
 WORKDIR /tmp/
 
 RUN set -ex \
-    && curl -sSL $KCPTUN_URL | tar xz \
-    && chmod +x ./* \
-    && mv ./* /usr/local/bin
+  && apt-get -y update \
+  && apt-get -y install curl \
+  && curl -sSL $KCPTUN_URL | tar xz \
+  && chmod +x ./* \
+  && mv ./* /usr/local/bin
+  && mv ./* /usr/local/bin \
+  && apt-get -y purge curl \
+  && apt-get -y autoremove \
+  && rm -fr /var/lib/apt/lists/*
 
 ENV TARGET_ADDR 127.0.0.1
 ENV TARGET_PORT 1080
