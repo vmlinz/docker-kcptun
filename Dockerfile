@@ -15,7 +15,6 @@ RUN set -ex \
   && apt-get -y install curl \
   && curl -sSL $KCPTUN_URL | tar xz \
   && chmod +x ./* \
-  && mv ./* /usr/local/bin
   && mv ./* /usr/local/bin \
   && apt-get -y purge curl \
   && apt-get -y autoremove \
