@@ -8,9 +8,10 @@ ss-server:
   restart: always
 
 kcptun-server:
-  image: vmlinz/kcptun-server
+  image: vmlinz/kcptun
   ports:
     - "38081:38081/udp"
   environment:
     - KEY=^password$
   restart: always
+
