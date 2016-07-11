@@ -1,0 +1,16 @@
+ss-server:
+  image: easypi/shadowsocks-libev
+  ports:
+    - "38080:38080/tcp"
+    - "38080:38080/udp"
+  environment:
+    - PASSWORD=5ouMnqPyzseL
+  restart: always
+
+kcptun-server:
+  image: vmlinz/kcptun-server
+  ports:
+    - "38081:38081/udp"
+  environment:
+    - KEY=^password$
+  restart: always
