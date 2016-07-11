@@ -10,7 +10,7 @@ services:
 env:
   global:
     - KCPTUN_VER=20160701
-    - SS_VER=2.4.7
+    - SS_VER=latest
   matrix:
     - URL=https://www.facebook.com/
     - URL=https://www.google.com/
