@@ -5,7 +5,7 @@
 FROM ubuntu:16.04
 MAINTAINER vmlinz <vmlinz@gmail.com>
 
-ENV KCPTUN_VER 20160701
+ENV KCPTUN_VER 20160719
 ENV KCPTUN_URL https://github.com/xtaci/kcptun/releases/download/v${KCPTUN_VER}/kcptun-linux-amd64-${KCPTUN_VER}.tar.gz
 
 WORKDIR /tmp/
