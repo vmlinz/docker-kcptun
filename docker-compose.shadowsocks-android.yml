@@ -12,7 +12,7 @@ ss-server:
 kcptun-server:
   image: vmlinz/kcptun
   ports:
-    - "38081/udp"
+    - "21:38081/udp"
   environment:
     - KEY=canter-urania-seres-les-blame-sonnet-yan
     - LISTEN_PORT=38081
