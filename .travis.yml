@@ -26,10 +26,10 @@ before_install:
   --key hellokcp --mode fast2 --conn 4
 - docker run -d -p 127.0.0.1:31080:1080 --link kcptun-client:kcptun-client --name ss-kcptun-client
   easypi/shadowsocks-libev:$SS_VER ss-local -s kcptun-client -p 38387 -m aes-256-cfb
-  -k helloss -b 0.0.0.0 -l 1080 -t 300 --fast-open
+  -k helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
 - docker run -d -p 127.0.0.1:1080:1080 --link kcptun-client:kcptun-client --name ss-client
   easypi/shadowsocks-libev:$SS_VER ss-local -s 127.0.0.1 -p 8388 -m aes-256-cfb -k
-  helloss -b 0.0.0.0 -l 1080 -t 300 --fast-open
+  helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
 - docker ps -a
 script:
 - curl -I $URL
