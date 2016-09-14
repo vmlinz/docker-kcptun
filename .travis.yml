@@ -29,6 +29,7 @@ before_install:
   helloss -b 0.0.0.0 -l 1080 -t 300 --fast-open
 - docker ps -a
 script:
+- curl -I $URL
 - curl -I -x socks5h://127.0.0.1:1080 $URL
 - curl -I -x socks5h://127.0.0.1:31080 $URL
 after_success: if [[ $TRAVIS_TAG && $URL == *youtube* ]]; then docker login -e="$DOCKER_EMAIL"
