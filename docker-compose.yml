@@ -1,17 +1,24 @@
 ss-server:
   image: easypi/shadowsocks-libev
   ports:
-    - "38080:38080/tcp"
-    - "38080:38080/udp"
+    - "443:8388/tcp"
+    - "443:8388/udp"
   environment:
-    - PASSWORD=5ouMnqPyzseL
+    - SERVER_PORT=8388
+    - METHOD=chacha20
+    - PASSWORD=unidle-olivia-tulwar-helen-unlimp-bocce-haster
   restart: always
 
 kcptun-server:
   image: vmlinz/kcptun
   ports:
-    - "38081:38081/udp"
+    - "21:38081/udp"
   environment:
-    - KEY=^password$
+    - KEY=canter-urania-seres-les-blame-sonnet-yan
+    - LISTEN_PORT=38081
+    - TARGET_PORT=8388
+    - TARGET_ADDR=ss-server
+  links:
+    - ss-server
   restart: always
 
