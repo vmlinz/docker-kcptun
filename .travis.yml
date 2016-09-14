@@ -24,11 +24,14 @@ before_install:
   - docker run -d -p 127.0.0.1:38387:38387 --link kcptun-server:kcptun-server --name kcptun-client vmlinz/kcptun:$KCPTUN_VER
     client_linux_amd64 -l 0.0.0.0:38387 -r kcptun-server:38388 --key hellokcp --mode fast2 --conn 4
   - docker run -d -p 127.0.0.1:1080:1080 --link kcptun-client:kcptun-client --name ss-client easypi/shadowsocks-libev:$SS_VER
-    ss-local -s kcptun-client -p 38387 -m aes-256-cfb -k helloss -b 0.0.0.0 -l 1080 -t 300 --fast-open
+    ss-local -s kcptun-client -p 38387 -m aes-256-cfb -k helloss -b 0.0.0.0 -l 31080 -t 300 --fast-open
+  - docker run -d -p 127.0.0.1:1080:1080 --link kcptun-client:kcptun-client --name ss-client easypi/shadowsocks-libev:$SS_VER
+    ss-local -s 127.0.0.1 -p 8388 -m aes-256-cfb -k helloss -b 0.0.0.0 -l 1080 -t 300 --fast-open
   - docker ps -a
 
 script:
   - curl -I -x socks5h://127.0.0.1:1080 $URL
+  - curl -I -x socks5h://127.0.0.1:31080 $URL
 
 after_success:
   if [[ $TRAVIS_TAG && $URL == *youtube* ]];
