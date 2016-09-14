@@ -7,6 +7,8 @@ env:
   global:
   - KCPTUN_VER=20160912
   - SS_VER=latest
+  - secure: Ce1Y76wIIrbvTc0Nfz8zAjI29LIC4AKSvfWIqQmtjIWtqqUdIzG1GYVQKfhreiobybRdFZRc7ZxmGA+kXz2Dex4lM/LkZhwUrzQKRhkEjaTDN21NIhyF1JoicacR5jEAP9067d/E2jt8nns0potUa+XE4IsWUsZzacknn2/NaDmU326wCHb1lThqYWbkhJNKAFCZWgEzBK8NfH8ybldPvSPkOv76P6icjahTMjWwAArTOaCCo2+7tjPH1CmKgoU54BnfSBXL89gJNWbd0P8SepKliq2cOje2BzCD1VR//N0QdmP9yJvpwYSWDc+uZxuMVmfQWdTDNh+UvZTNLZ30/JgvJV1IpC1PL3qVPpOyxco+8E3lKbmPzuh/6PIuZjXskPJqhQxkomkJS14cRkmPSiStgIfPLbRPeJKDbx5464E6x0EfAeedrJuv4U+pGwSeKMFnvp5w0jKrjsPELnfPMdepcvH5qpqJqge+uFTnOt402pLRVgE/L+1z5jF8fUG6D3WqZlBy77KFM05yyRvjhmeRhcJQhq8aE+guLsZuq3xTg+4RlnAGIPMCay54wT21FTiwX3Nf4ITUj/iQmj5UVixOlxLo8CF7OpywJvUyjHEuAgwv/3c3veuPMjvGsrn6bn04VncsRz1Oq46wG4H53xk3B1TNCg2KCEAeZMct4h4=
+  - secure: R+zH8UhEPWSMw/mgxzHGddCYh+ZSI2r2ktF4qNZuPoeRyuG7FmUjqytCWDoXxILo/JIA6Z9Vujxzq3w6CU/jmyrgBt3rYuc27RjNEbiqp9GLMqyRf3tGLyiNYv2jAl0joG6kGJ1wKPHKGEJmQNm1/Ub17SdgtrsRFivK7sa7aicboShZTQ4O0+lyNzJ1N8BhrSjtsV3cB721EcuxluxfKyVoL/8vnpY+7Xo3l2q6PjjHfBckXcOyq4twAwa0QCPis1c9PyDkI+oC1bT7Rmaz4aKN57MS9huOQRmkiufW1hDMrz0M3WmlpizTDj/42xNGnMrOuVHChiQQRhJNhH3harkptie+/COCKDddT2h4Ifr5DAdPIPEIk6prk/+LUcplKrotBYoXLJzfnjZWjwu4nCFcedCuP0pLY1UObrZ/w7uTQkvyThWgOR4WgdL+vNXR6RYBU9PqYYiPbnulFW2L560ql8L/n1tJuJsLyCJhN7ud1XpKxPVgX7U3anIibrKSgyVftuBs1fsgFg0fbAPgkI9ASXaTn3VG6yEi3V94kPBOGQrEnQMGZyu/VcbbvDFdZCvQUK+rvoJ6uKTLQm/AT39689x5UJwFKWw85qqHX1VqXNAI85t1njb/P530OJSdhrWjWlXKnuxGYqeu7QuAf9OzUEO+rvcU9C0vKFg6JH4=
   matrix:
   - URL=https://www.facebook.com/
   - URL=https://www.google.com/
@@ -15,7 +17,8 @@ env:
 before_install:
 - docker run -d -p 127.0.0.1:8398:8388 -e PASSWORD=helloworld --name server easypi/shadowsocks-libev
 - docker run -d -p 127.0.0.1:1090:1080 --link server:server --name client easypi/shadowsocks-libev
-  ss-local -s server -p 8388 -m aes-256-cfb -k helloworld -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
+  ss-local -s server -p 8388 -m aes-256-cfb -k helloworld -b 0.0.0.0 -l 1080 -t 60
+  -A --fast-open
 - docker build -t vmlinz/kcptun:$KCPTUN_VER .
 - docker run -d -p 127.0.0.1:8388:8388 -e PASSWORD=helloss --name ss-server easypi/shadowsocks-libev:$SS_VER
 - docker run -d -p 127.0.0.1:38388:38388/udp -e KEY=hellokcp -e TARGET_ADDR=ss-server
@@ -24,21 +27,21 @@ before_install:
 - docker run -d -p 127.0.0.1:38387:38387 --link kcptun-server:kcptun-server --name
   kcptun-client vmlinz/kcptun:$KCPTUN_VER client_linux_amd64 -l 0.0.0.0:38387 -r kcptun-server:38388
   --key hellokcp --mode fast2 --conn 4
-- docker run -d -p 127.0.0.1:31080:1080 --link kcptun-client:kcptun-client --name ss-kcptun-client
-  easypi/shadowsocks-libev:$SS_VER ss-local -s kcptun-client -p 38387 -m aes-256-cfb
-  -k helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
-- docker run -d -p 127.0.0.1:1080:1080 --link ss-server:ss-server --name ss-client easypi/shadowsocks-libev:$SS_VER
-  ss-local -s ss-server -p 8388 -m aes-256-cfb -k helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
+- docker run -d -p 127.0.0.1:31080:1080 --link kcptun-client:kcptun-client --name
+  ss-kcptun-client easypi/shadowsocks-libev:$SS_VER ss-local -s kcptun-client -p 38387
+  -m aes-256-cfb -k helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
+- docker run -d -p 127.0.0.1:1080:1080 --link ss-server:ss-server --name ss-client
+  easypi/shadowsocks-libev:$SS_VER ss-local -s ss-server -p 8388 -m aes-256-cfb -k
+  helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
 - docker ps -a
 script:
 - curl -I $URL
 - curl -I -x socks5h://127.0.0.1:1090 $URL
 - curl -I -x socks5h://127.0.0.1:1080 $URL
 - curl -I -x socks5h://127.0.0.1:31080 $URL
-after_success: if [[ $TRAVIS_TAG && $URL == *youtube* ]]; then docker login -e="$DOCKER_EMAIL"
-  -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker tag vmlinz/kcptun:$KCPTUN_VER
-  vmlinz/kcptun:latest; docker push vmlinz/kcptun:$KCPTUN_VER; docker push vmlinz/kcptun:latest;
-  fi
+after_success: if [[ $TRAVIS_TAG && $URL == *youtube* ]]; then docker login -u="$DOCKER_USERNAME"
+  -p="$DOCKER_PASSWORD"; docker tag vmlinz/kcptun:$KCPTUN_VER vmlinz/kcptun:latest;
+  docker push vmlinz/kcptun:$KCPTUN_VER; docker push vmlinz/kcptun:latest; fi
 notifications:
   slack:
     secure: nnCvwBXDts8ojsErxdWYZFy0eg+lH7jVXMsBDlyeXj3KH5UCjYTKRo3eHeLihQq9i+FhEoBfcBzkCWqc4WXaNVrHl88yCdePrsI6G7BcPKK2tVH8akhGouuD2TFaN1Ne9NQuc38s5cj6IDKK9RvbuntaBxcFeYy7w8bVw/IMVyi4M8iSdASFnzbFQkcbBcQsW4xtE/9PZRG3ey6F2SzAv4czGM/2rxqPTqbBGbRvxyWbNNxn7pw0bR4OZycc3E3icXGTLTYtUiW4/LVUF/vJfkMzPo+tq4N8NBp/2u2X+G8xKLd2y5KNW4Q6+jXwscisyRSt5vXQXa6GCJ+FSAQRhXCtxkmApE8CPW4/iHHT9ypEkj6cb0ewZIFN+vpvf1tJQxeMiGguO26qjhAPhx73Z2rxTUfGU7Oihm5fo/kWIVFZT4I6MNPJJYRPNG6EZ3s4nNflFJeiRJl5V/SHL+rCxB5uSykcetQQmRdmUtTkq0zBdWGXeYCibDI3lu/kCAmX3w8X536Bs4eZUl0rtLYN/liXAzqLzAjw37zCKbAvrMQevxO7zeqhaxh1xVLw7lTVaA3j9uJQlvmpoobd0TdVTrzmAVgDTeKY3emG3UHELkO6lIu+X0qqBp6hrFfLNcC0WClMPMaAGhYxPIiO1g89v7dZXV6O8Vw/Bi/zlKcEOCE=
