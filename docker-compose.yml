@@ -21,4 +21,3 @@ kcptun-server:
   links:
     - ss-server
   restart: always
-
