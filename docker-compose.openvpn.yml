@@ -8,10 +8,10 @@ kcptun-openvpn:
     - TARGET_PORT=1194
     - TARGET_ADDR=openvpn-server
   links:
-    - openvpn-server
+    - openvpn
   restart: always
 
-openvpn-server:
+openvpn:
   image: kylemanna/openvpn
   ports:
     - "1194:1194/udp"
