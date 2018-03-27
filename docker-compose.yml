@@ -21,3 +21,11 @@ kcptun-server:
   links:
     - ss-server
   restart: always
+
+v2ray-server:
+  image: v2ray/official
+  ports:
+    - "38001:8001/tcp"
+    - "38001:8001/udp"
+  restart: always
+
