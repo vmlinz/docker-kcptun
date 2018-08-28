@@ -11,5 +11,5 @@ env:
 script:
   - docker build -t vmlinz/kcptun:$KCPTUN_VER .
 after_success:
-  docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker tag vmlinz/kcptun:$KCPTUN_VER vmlinz/kcptun:latest;
+  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin; docker tag vmlinz/kcptun:$KCPTUN_VER vmlinz/kcptun:latest;
   docker push vmlinz/kcptun:$KCPTUN_VER; docker push vmlinz/kcptun:latest
