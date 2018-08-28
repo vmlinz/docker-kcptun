@@ -1,2 +1,3 @@
 *~
 *.swp
+docker-compose/openvpn/openvpn-data/
