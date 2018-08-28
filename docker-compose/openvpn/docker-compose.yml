@@ -1,0 +1,27 @@
+version: '3.3'
+
+services:
+  openvpn-server:
+    cap_add:
+      - NET_ADMIN
+    image: kylemanna/openvpn
+    container_name: openvpn-server
+    ports:
+      - '1194:1194/udp'
+      - '1194:1194/tcp'
+    restart: always
+    volumes:
+      - ./openvpn-data/conf:/etc/openvpn
+
+  kcptun-server:
+    image: vmlinz/kcptun
+    ports:
+      - '4911:38081/udp'
+    environment:
+      - KEY=canter-urania-seres-les-blame-sonnet-yan
+      - LISTEN_PORT=38081
+      - TARGET_PORT=1194
+      - TARGET_ADDR=openvpn-server
+    links:
+      - openvpn-server
+    restart: always

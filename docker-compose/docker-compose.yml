@@ -1,8 +1,8 @@
 ss-server:
   image: easypi/shadowsocks-libev
   ports:
-    - "443:8388/tcp"
-    - "443:8388/udp"
+    - '443:8388/tcp'
+    - '443:8388/udp'
   environment:
     - SERVER_PORT=8388
     - METHOD=chacha20
@@ -12,7 +12,7 @@ ss-server:
 kcptun-server:
   image: vmlinz/kcptun
   ports:
-    - "38081/udp"
+    - '38081/udp'
   environment:
     - KEY=canter-urania-seres-les-blame-sonnet-yan
     - LISTEN_PORT=38081
@@ -25,7 +25,6 @@ kcptun-server:
 v2ray-server:
   image: v2ray/official
   ports:
-    - "38001:8001/tcp"
-    - "38001:8001/udp"
+    - '38001:8001/tcp'
+    - '38001:8001/udp'
   restart: always
-
