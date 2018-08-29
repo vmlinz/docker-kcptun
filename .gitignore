@@ -1,4 +1,4 @@
 *~
 *.swp
 docker-compose/openvpn/openvpn-data/
-*/**/.env
+*/**/env/*
