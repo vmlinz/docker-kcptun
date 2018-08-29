@@ -10,7 +10,7 @@ ss-server:
   restart: always
 
 kcptun-server:
-  image: vmlinz/kcptun
+  image: vmlinz/kcptun:latest
   ports:
     - '38081/udp'
   environment:
