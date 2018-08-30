@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  shadowsocks-server:
+    image: easypi/shadowsocks-libev
+    ports:
+      - '443:8388/tcp'
+      - '443:8388/udp'
+    env_file:
+      - ./env/.shadowsocks-server.env
+    environment:
+      - SERVER_PORT=8388
+      - METHOD=chacha20
+    restart: always
+
+  kcptun-server:
+    image: vmlinz/kcptun:latest
+    ports:
+      - '38081:38081/udp'
+    env_file:
+      - ./env/.kcptun-server.env
+    environment:
+      - LISTEN_PORT=38081
+      - TARGET_PORT=8388
+      - TARGET_ADDR=shadowsocks-server
+    links:
+      - shadowsocks-server
+    restart: always

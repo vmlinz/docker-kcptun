@@ -6,40 +6,10 @@ services:
 env:
   global:
     - KCPTUN_VER=20180810
-    - SS_VER=latest
     - secure: UGh5g3O9iucqq9eDRSwSR/cVJrkC2PAACeiKbI7+/WUVV6sssFmoB+JvJmcw68eO+kRTyAGPO7I8zMRR36wBwu7z8R9KhyH7ZVvQI6eYm5UdXTuz2vX2bAWHltA0ziJFP+PhYJ38XYykixEzIakFnUWMeG56EOn2dNSLzgH753g1QIjFdZk39a4DFnQBz2Yr6/KjDHvgecgbzcak2PmQTNJxuHW5k4JD/x0/v+RqxkzhvUyXvw5QftpHWZJGSUGsltXyin6rzG9j0LORhDIb6MS3rGSlgsTyw1dmVNCv13YV58XcgRt9Pq+1kzr8QTT/nOVJ5xCYIprYAtfGnOqkKF4VuBLSenfrS2fv0aT7Arb/upD8olyXIUxExNAqyackpl2n8c8/hOG0ze7D09HvgAaagm+Z6k8Rjhpud8HvpFds72gcr/hiZv0yZ0RAPdfKgkTxk81O4FKed6qtfmZNR1/28rorm/RNJSKSLKGiw86bggtT/1lKkn7x0e6LgWcsqsYfdt6lUqBYrxDNUr7UsXheW6s2kBb74517wsHMPWvWZKCed3uibQv1R6qgJzhbBB3NEKsxhFcBG9/Clcc/y6mIBjokw03QKW9ug1B5KyequYsPFzpXq0HEXHk1egD6ElPx4ZJLO/GYqKAzqsQcNctHY4hgnZWPh0L81H0PbWY=
     - secure: oTdFKtMoIFoCrrmbsrgW3/50VFBjKUHmG8qbVy50Bq7o4rN5t+gERYZgh1yg/kWxLxiP0GAXqg+bkdJ3Ti+2e0RKvR4GhFXBRDowUR2eV/UyHjq04GyuOqH1r8pxFMMUhlYd//sE1p6dBjvijl4tpqHWwM44kKpD77V0miq0G5vjQzYvLDTOaDGE/aUbSF9eth6f/mOhrXoeXxSr9Y5kcG6/h+OlcE8pgcgRpRVYDqePS1GvBm2ZligRlPQ6IvwDRyau3TRBLz+4madrq3dQAJk8CNj5OP+p1M9UGgtPoiwdCjbZ1ez0haYrZm00JMFOcmmxz3iUYW37Ps6FBq/18yIDEsqgtLRj63fKRgJgkbZtyJzso5ePDccLKAXXonCVyrChiaATAy+0H5fURuNzqydoYae0Zwg0o+ceThkdMDTq+WXM6WEvC5o3xScKg2ise60aWj2x2We2b9R3OKr27StaemZDPr+YYZtqxDBeFkTAbpDrj9FD+HVPgrmY/8kUnimDbmE0hlPFIJIquQESbCH0yJzfL62+1BesAYEiGpHXUGWRZfccxquewFiK7NwtL7yR4oiuuSSh9ZjszKmzMnbqGnaWasRVpMzGi67xZK2PnJTiRxDnTn9T/1RcmrgTGPuKBRnkB++3r2mi+kXn2z1W8QugkucKuhionylSUoY=
-  matrix:
-    - URL=https://www.facebook.com/
-    - URL=https://www.google.com/
-    - URL=https://www.twitter.com/
-    - URL=https://www.youtube.com/
-before_install:
-  - docker run -d -p 127.0.0.1:8398:8388 -e PASSWORD=helloworld --name server easypi/shadowsocks-libev
-  - docker run -d -p 127.0.0.1:1090:1080 --link server:server --name client easypi/shadowsocks-libev
-    ss-local -s server -p 8388 -m aes-256-cfb -k helloworld -b 0.0.0.0 -l 1080 -t 60
-    -A --fast-open
-  - docker build -t vmlinz/kcptun:$KCPTUN_VER .
-  - docker run -d -p 127.0.0.1:8388:8388 -e PASSWORD=helloss --name ss-server easypi/shadowsocks-libev:$SS_VER
-  - docker run -d -p 127.0.0.1:38388:38388/udp -e KEY=hellokcp -e TARGET_ADDR=ss-server
-    -e TARGET_PORT=8388 -e LISTEN_ADDR=0.0.0.0 -e LISTEN_PORT=38388 --link ss-server:ss-server
-    --name kcptun-server vmlinz/kcptun:$KCPTUN_VER
-  - docker run -d -p 127.0.0.1:38387:38387 --link kcptun-server:kcptun-server --name
-    kcptun-client vmlinz/kcptun:$KCPTUN_VER client_linux_amd64 -l 0.0.0.0:38387 -r kcptun-server:38388
-    --key hellokcp --mode fast2 --conn 4
-  - docker run -d -p 127.0.0.1:31080:1080 --link kcptun-client:kcptun-client --name
-    ss-kcptun-client easypi/shadowsocks-libev:$SS_VER ss-local -s kcptun-client -p 38387
-    -m aes-256-cfb -k helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
-  - docker run -d -p 127.0.0.1:1080:1080 --link ss-server:ss-server --name ss-client
-    easypi/shadowsocks-libev:$SS_VER ss-local -s ss-server -p 8388 -m aes-256-cfb -k
-    helloss -b 0.0.0.0 -l 1080 -t 60 -A --fast-open
-  - docker ps -a
 script:
-  - curl -I $URL
+  - docker build -t vmlinz/kcptun:$KCPTUN_VER .
 after_success:
-  if [[ $TRAVIS_TAG && $URL == *youtube* ]]; then docker login -u="$DOCKER_USERNAME"
-  -p="$DOCKER_PASSWORD"; docker tag vmlinz/kcptun:$KCPTUN_VER vmlinz/kcptun:latest;
-  docker push vmlinz/kcptun:$KCPTUN_VER; docker push vmlinz/kcptun:latest; fi
-notifications:
-  slack:
-    secure: nnCvwBXDts8ojsErxdWYZFy0eg+lH7jVXMsBDlyeXj3KH5UCjYTKRo3eHeLihQq9i+FhEoBfcBzkCWqc4WXaNVrHl88yCdePrsI6G7BcPKK2tVH8akhGouuD2TFaN1Ne9NQuc38s5cj6IDKK9RvbuntaBxcFeYy7w8bVw/IMVyi4M8iSdASFnzbFQkcbBcQsW4xtE/9PZRG3ey6F2SzAv4czGM/2rxqPTqbBGbRvxyWbNNxn7pw0bR4OZycc3E3icXGTLTYtUiW4/LVUF/vJfkMzPo+tq4N8NBp/2u2X+G8xKLd2y5KNW4Q6+jXwscisyRSt5vXQXa6GCJ+FSAQRhXCtxkmApE8CPW4/iHHT9ypEkj6cb0ewZIFN+vpvf1tJQxeMiGguO26qjhAPhx73Z2rxTUfGU7Oihm5fo/kWIVFZT4I6MNPJJYRPNG6EZ3s4nNflFJeiRJl5V/SHL+rCxB5uSykcetQQmRdmUtTkq0zBdWGXeYCibDI3lu/kCAmX3w8X536Bs4eZUl0rtLYN/liXAzqLzAjw37zCKbAvrMQevxO7zeqhaxh1xVLw7lTVaA3j9uJQlvmpoobd0TdVTrzmAVgDTeKY3emG3UHELkO6lIu+X0qqBp6hrFfLNcC0WClMPMaAGhYxPIiO1g89v7dZXV6O8Vw/Bi/zlKcEOCE=
+  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin; docker tag vmlinz/kcptun:$KCPTUN_VER vmlinz/kcptun:latest;
+  docker push vmlinz/kcptun:$KCPTUN_VER; docker push vmlinz/kcptun:latest
